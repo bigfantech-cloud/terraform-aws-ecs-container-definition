@@ -91,7 +91,7 @@ Example:
 
 ```
 module "ecs-container-definition" {
-  source        = "app.terraform.io/bigfantech/ecs-container-definition/aws"
+  source        = "bigfantech-cloud/ecs-container-definition/aws"
   version       = "1.0.0"
 
   project_name    = "abc"
