@@ -38,7 +38,7 @@ variable "container_cpu_units" {
 variable "port_mappings" {
   description = <<-EOF
     List of map containing ConatinerPort, Protocol
-    Ex: [
+    example: [
         {
         containerPort = 443
         protocol      = tcp
@@ -57,7 +57,7 @@ variable "port_mappings" {
 variable "container_env_vars" {
   description = <<-EOF
     List of map containing environment variable "name" "value"
-    Ex: [
+    example: [
         {
             name      = "key"
             value     = "value"
@@ -76,7 +76,7 @@ variable "container_env_vars" {
 variable "container_secrets" {
   description = <<-EOF
     List of map containing environment secrets "name" "valueFrom"
-    Ex: [
+    example: [
         {
             name      = "key"
             valueFrom = "ssm_parameter_name"
@@ -104,7 +104,7 @@ EOF
 }
 
 variable "cd_awslogs_region" {
-  description = "Containter Definition AWSlogs creation region. Ex: us-east-1"
+  description = "Containter Definition AWSlogs creation region. example: us-east-1"
   type        = string
 }
 
