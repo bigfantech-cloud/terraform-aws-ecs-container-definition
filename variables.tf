@@ -13,7 +13,7 @@ variable "container_image" {
 }
 
 variable "container_memory" {
-  description = "Container Hard memory limit"
+  description = "The amount (in MiB) of memory to present to the container. If your container attempts to exceed the memory specified here, the container is killed."
   type        = number
   default     = null
 }
@@ -29,66 +29,38 @@ variable "container_memory_reservation" {
 
 variable "container_cpu_units" {
   description = <<-EOF
-  "The number of cpu units to reserve for the container.
-  A container instance has 1,024 cpu units for every CPU core."
+  "The number of cpu units to reserve for the container"
   EOF
+  type        = number
   default     = null
 }
 
 variable "port_mappings" {
-  description = <<-EOF
-    List of map containing ConatinerPort, Protocol
-    example: [
-        {
-        containerPort = 443
-        protocol      = tcp
-        },
-    ]
-    EOF
-
+  description = "List of container port mapping config map containing `name` (optional), `ConatinerPort`, `Protocol` (optional), `appProtocol` (optional)  "
   type = list(object({
+    name          = optional(string)
     containerPort = number
-    protocol      = string
+    protocol      = optional(string)
+    appProtocol   = optional(string)
   }))
-
   default = []
 }
 
 variable "container_env_vars" {
-  description = <<-EOF
-    List of map containing environment variable "name" "value"
-    example: [
-        {
-            name      = "key"
-            value     = "value"
-        },
-    ]
-    EOF  
-
+  description = "List of map containing environment secrets `name`, `value`"
   type = list(object({
     name  = string
     value = string
   }))
-
   default = []
 }
 
 variable "container_secrets" {
-  description = <<-EOF
-    List of map containing environment secrets "name" "valueFrom"
-    example: [
-        {
-            name      = "key"
-            valueFrom = "ssm_parameter_name"
-        },
-    ]
-    EOF  
-
+  description = "List of map containing environment secrets `name`, `valueFrom`"
   type = list(object({
     name      = string
     valueFrom = string
   }))
-
   default = []
 }
 
@@ -103,13 +75,8 @@ EOF
   default     = false
 }
 
-variable "cd_awslogs_region" {
-  description = "Containter Definition AWSlogs creation region. example: us-east-1"
-  type        = string
-}
-
 variable "command" {
-  description = "Command to add in Conatiner Definition"
+  description = "The command that's passed to the container"
   type        = list(string)
   default     = null
 }

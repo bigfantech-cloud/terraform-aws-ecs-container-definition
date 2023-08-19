@@ -1,3 +1,5 @@
+data "aws_region" "current" {}
+
 locals {
   container_definition = {
     name               = var.container_name
@@ -9,16 +11,21 @@ locals {
     command            = var.command
     stopTimeout        = var.stoptimeout
 
-    portMappings = var.port_mappings
-    environment  = var.container_env_vars != [] ? local.sorted_environment_vars : []
-    secrets      = var.container_secrets != [] ? local.sorted_secrets_vars : []
+    portMappings = [for map in var.port_mappings : {
+      name          = coalesce(map.name, var.container_name)
+      containerPort = map.containerPort
+      protocol      = coalesce(map.protocol, "tcp")
+      appProtocol   = coalesce(map.appProtocol, "http")
+    }]
+    environment = var.container_env_vars != [] ? local.sorted_environment_vars : []
+    secrets     = var.container_secrets != [] ? local.sorted_secrets_vars : []
 
     logConfiguration = {
       logDriver = "awslogs"
       options = {
         awslogs-create-group  = "true"
         awslogs-group         = "/ecs/${module.this.id}/${var.container_name}"
-        awslogs-region        = var.cd_awslogs_region
+        awslogs-region        = data.aws_region.current.name
         awslogs-stream-prefix = "ecs"
       }
     }
